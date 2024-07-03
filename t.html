@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính điểm trung bình môn học</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="number"] {
+            width: 100px;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        #result {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Nhập điểm và tính điểm trung bình môn học</h2>
+    <form id="gradeForm">
+        <label for="midterm">Điểm giữa kỳ:</label>
+        <input type="number" id="midterm" min="0" max="10" step="0.1" value="7.5" required><br>
+        
+        <div id="regularInputs">
+            <!-- Điểm thường xuyên không có giá trị mặc định -->
+        </div>
+
+        <button type="button" id="addRegular">Thêm điểm thường xuyên</button><br><br>
+
+        <label for="final">Điểm cuối kỳ:</label>
+        <input type="number" id="final" min="0" max="10" step="0.1" value="4.5" required><br>
+
+        <button type="button" onclick="calculateAverage()">Tính điểm trung bình</button>
+    </form>
+
+    <div id="result"></div>
+
+    <script>
+        // Hàm tính điểm trung bình
+        function calculateAverage() {
+            var midterm = parseFloat(document.getElementById('midterm').value);
+            var regularInputs = document.getElementsByClassName('regular-input');
+            var final = parseFloat(document.getElementById('final').value);
+
+            // Tính tổng các điểm thường xuyên (hệ số 20%)
+            var sumRegularScores = 0;
+            for (var i = 0; i < regularInputs.length; i++) {
+                sumRegularScores += parseFloat(regularInputs[i].value);
+            }
+
+            // Tính điểm trung bình theo công thức mới
+            var average = (midterm * 0.2 + sumRegularScores / regularInputs.length * 0.3 + final * 0.5);
+
+            // Hiển thị kết quả
+            var resultElement = document.getElementById('result');
+            resultElement.innerHTML = "<p>Điểm trung bình là: " + average.toFixed(1) + "</p>";
+        }
+
+        // Sự kiện click vào nút "Thêm điểm thường xuyên"
+        document.getElementById('addRegular').addEventListener('click', function() {
+            var regularInputsDiv = document.getElementById('regularInputs');
+            var nextRegularNumber = regularInputsDiv.children.length / 2 + 1;
+
+            var label = document.createElement('label');
+            label.textContent = "Điểm thường xuyên " + nextRegularNumber + ":";
+            var input = document.createElement('input');
+            input.type = "number";
+            input.classList.add("regular-input");
+            input.min = "0";
+            input.max = "10";
+            input.step = "0.1";
+            input.required = true;
+
+            regularInputsDiv.appendChild(label);
+            regularInputsDiv.appendChild(input);
+            regularInputsDiv.appendChild(document.createElement('br'));
+        });
+    </script>
+</body>
+</html>
